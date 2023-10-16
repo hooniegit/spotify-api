@@ -130,7 +130,6 @@ def browse_featured_playlists(cnt):
     sleep(remain_time) if remain_time > 0 else sleep(0)
 
 
-
 # api request: artists/related_artists
 def artists_related_artists(cnt, insert_date):
     from time import time, sleep
@@ -208,77 +207,77 @@ def artists_related_artists(cnt, insert_date):
 
 
 # api request: albums
-def albums(cnt, insert_date):
-    from time import time, sleep
-    from files import file_json
+# def albums(cnt, insert_date):
+#     from time import time, sleep
+#     from files import file_json
 
-    conn = open_connector()
+#     conn = open_connector()
 
-    try: os.makedirs(f"{data_dir}/albums/{insert_date}")
-    except: pass
-    try: os.makedirs(f"{data_dir}/tracks/{insert_date}")
-    except: pass
+#     try: os.makedirs(f"{data_dir}/albums/{insert_date}")
+#     except: pass
+#     try: os.makedirs(f"{data_dir}/tracks/{insert_date}")
+#     except: pass
 
-    query_search = f"""
-                   SELECT album_id FROM albums
-                   WHERE insert_date = '{insert_date}'
-                   """
-    result = fetchall_query(conn=conn, query=query_search)
-    id_list = [album[0] for album in result]
+#     query_search = f"""
+#                    SELECT album_id FROM albums
+#                    WHERE insert_date = '{insert_date}'
+#                    """
+#     result = fetchall_query(conn=conn, query=query_search)
+#     id_list = [album[0] for album in result]
 
-    conn.close()
+#     conn.close()
 
-    for album_id in id_list:
-        start_time = time()
+#     for album_id in id_list:
+#         start_time = time()
 
-        endpoint=f'albums/{album_id}'
-        params={'market' : 'KR'}
-        response = get_response(cnt=cnt, endpoint=endpoint, params=params)
+#         endpoint=f'albums/{album_id}'
+#         params={'market' : 'KR'}
+#         response = get_response(cnt=cnt, endpoint=endpoint, params=params)
 
-        file_dir = f"{data_dir}/albums/{insert_date}/{album_id}.json"
-        file_json(file_dir=file_dir, json_data=response)
+#         file_dir = f"{data_dir}/albums/{insert_date}/{album_id}.json"
+#         file_json(file_dir=file_dir, json_data=response)
 
-        for track in response['tracks']['items']:
-             track_id = track["id"]
-             file_dir = f"{data_dir}/tracks/{insert_date}/{track_id}.json"
-             file_json(file_dir=file_dir, json_data=track)
+#         for track in response['tracks']['items']:
+#              track_id = track["id"]
+#              file_dir = f"{data_dir}/tracks/{insert_date}/{track_id}.json"
+#              file_json(file_dir=file_dir, json_data=track)
 
-        end_time = time()
-        remain_time = 0.5 - (end_time - start_time)
-        sleep(remain_time) if remain_time > 0 else sleep(0)
+#         end_time = time()
+#         remain_time = 0.5 - (end_time - start_time)
+#         sleep(remain_time) if remain_time > 0 else sleep(0)
 
 
 # api request: artists
-def artists(cnt, insert_date):
-    from time import time, sleep
-    from files import file_json
+# def artists(cnt, insert_date):
+#     from time import time, sleep
+#     from files import file_json
 
-    conn = open_connector()
+#     conn = open_connector()
 
-    try: os.makedirs(f"{data_dir}/artists/{insert_date}")
-    except: pass
+#     try: os.makedirs(f"{data_dir}/artists/{insert_date}")
+#     except: pass
 
-    query_search = f"""
-                   SELECT artist_id FROM artists
-                   WHERE insert_date = '{insert_date}'
-                   """
-    result = fetchall_query(conn=conn, query=query_search)
+#     query_search = f"""
+#                    SELECT artist_id FROM artists
+#                    WHERE insert_date = '{insert_date}'
+#                    """
+#     result = fetchall_query(conn=conn, query=query_search)
 
-    conn.close()
+#     conn.close()
 
-    id_list = [artist[0] for artist in result]
-    for id in id_list:
-        start_time = time()
+#     id_list = [artist[0] for artist in result]
+#     for id in id_list:
+#         start_time = time()
 
-        endpoint = f'artists/{id}'
-        params = {'market' : 'KR'}
-        response = get_response(cnt=cnt, endpoint=endpoint, params=params)
-        file_dir = f"{data_dir}/artists/{insert_date}/{id}.json"
-        file_json(file_dir=file_dir, json_data=response)
+#         endpoint = f'artists/{id}'
+#         params = {'market' : 'KR'}
+#         response = get_response(cnt=cnt, endpoint=endpoint, params=params)
+#         file_dir = f"{data_dir}/artists/{insert_date}/{id}.json"
+#         file_json(file_dir=file_dir, json_data=response)
 
-        end_time = time()
-        remain_time = 0.5 - (end_time - start_time)
-        sleep(remain_time) if remain_time > 0 else sleep(0)
+#         end_time = time()
+#         remain_time = 0.5 - (end_time - start_time)
+#         sleep(remain_time) if remain_time > 0 else sleep(0)
 
 
 # api request: artists/albums
@@ -298,6 +297,7 @@ def thread_artists_albums(insert_date):
 
     conn.close()
 
+    # thread function
     def do_work(id_list, cnt, insert_date):
         conn = open_connector()
 
@@ -349,6 +349,128 @@ def thread_artists_albums(insert_date):
         thread.join()
 
 
+# api request: albums
+# multi-thread
+def thread_albums(insert_date):
+    from threading import Thread
+    from time import time, sleep
+    from files import file_json
+
+    conn = open_connector()
+
+    try: os.makedirs(f"{data_dir}/albums/{insert_date}")
+    except: pass
+    try: os.makedirs(f"{data_dir}/tracks/{insert_date}")
+    except: pass
+
+    query_search = f"""
+                   SELECT album_id FROM albums
+                   WHERE insert_date = '{insert_date}'
+                   """
+    result = fetchall_query(conn=conn, query=query_search)
+    id_list = [album[0] for album in result]
+
+    conn.close()
+
+    # thread function
+    def do_work(id_list, cnt, insert_date):
+        for album_id in id_list:
+            start_time = time()
+
+            endpoint=f'albums/{album_id}'
+            params={'market' : 'KR'}
+            response = get_response(cnt=cnt, endpoint=endpoint, params=params)
+
+            file_dir = f"{data_dir}/albums/{insert_date}/{album_id}.json"
+            file_json(file_dir=file_dir, json_data=response)
+
+            for track in response['tracks']['items']:
+                track_id = track["id"]
+                file_dir = f"{data_dir}/tracks/{insert_date}/{track_id}.json"
+                file_json(file_dir=file_dir, json_data=track)
+
+            end_time = time()
+            remain_time = 0.5 - (end_time - start_time)
+            sleep(remain_time) if remain_time > 0 else sleep(0)   
+
+    index_cnt = len(id_list) // 4
+    index_remain = len(id_list) % 4
+
+    big_list = []
+    for i in range(4):
+        small_list = id_list[i*index_cnt : (i+1)*index_cnt]
+        big_list.append(small_list)
+    big_list[-1] += id_list[-index_remain:]
+
+    print(big_list)
+
+    threads = []
+    for j in range(len(big_list)):
+        thread = Thread(target=do_work, args=(big_list[j], j+1, insert_date))
+        threads.append(thread)
+        thread.start()
+    
+    for thread in threads:
+        thread.join()
+
+
+# api request: artists
+# multi-thread
+def thread_artists(insert_date):
+    from threading import Thread
+    from time import time, sleep
+    from files import file_json
+
+    conn = open_connector()
+    try: os.makedirs(f"{data_dir}/artists/{insert_date}")
+    except: pass
+
+    query_search = f"""
+                   SELECT artist_id FROM artists
+                   WHERE insert_date = '{insert_date}'
+                   """
+    result = fetchall_query(conn=conn, query=query_search)
+
+    id_list = [artist[0] for artist in result]
+    conn.close()
+
+    # thread function
+    def do_work(id_list, cnt, insert_date):
+        for id in id_list:
+            start_time = time()
+
+            endpoint = f'artists/{id}'
+            params = {'market' : 'KR'}
+            response = get_response(cnt=cnt, endpoint=endpoint, params=params)
+
+            file_dir = f"{data_dir}/artists/{insert_date}/{id}.json"
+            file_json(file_dir=file_dir, json_data=response)
+
+            end_time = time()
+            remain_time = 0.5 - (end_time - start_time)
+            sleep(remain_time) if remain_time > 0 else sleep(0)
+
+    index_cnt = len(id_list) // 4
+    index_remain = len(id_list) % 4
+
+    big_list = []
+    for i in range(4):
+        small_list = id_list[i*index_cnt : (i+1)*index_cnt]
+        big_list.append(small_list)
+    big_list[-1] += id_list[-index_remain:]
+
+    print(big_list)
+
+    threads = []
+    for j in range(len(big_list)):
+        thread = Thread(target=do_work, args=(big_list[j], j+1, insert_date))
+        threads.append(thread)
+        thread.start()
+    
+    for thread in threads:
+        thread.join() 
+
+
 # test
 if __name__ == "__main__":
     # confirmed - 23.10.16
@@ -371,4 +493,10 @@ if __name__ == "__main__":
 
     # confirmed - 23.10.16
     # thread_artists_albums("2023-10-16")
+
+    # confirmed - 23.10.16
+    # thread_albums("2023-10-16")
+
+    # confirmed - 23.10.16
+    # thread_artists("2023-10-16")
     pass
