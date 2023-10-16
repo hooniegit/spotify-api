@@ -55,8 +55,9 @@ def fetchall_query(conn, query, values=None):
 # test
 if __name__ == "__main__":
     # confirmed - 23.10.06
-    conn = open_connector()
-    query = "SELECT COUNT(*) FROM albums where insert_date = (%s)"
-    values = ("2023-10-11",)
-    result = fetchall_query(conn, query, values)
-    print(result)
+    # conn = open_connector()
+    # query = "SELECT COUNT(*) FROM albums where insert_date = (%s)"
+    # values = ("2023-10-11",)
+    # result = fetchall_query(conn, query, values)
+    # print(result)
+    pass

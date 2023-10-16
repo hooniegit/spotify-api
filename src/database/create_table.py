@@ -87,7 +87,8 @@ def create_table_relations():
 
 if __name__ == "__main__":
     # confirmed - 23.10.16
-    drop_tables()
-    create_table_albums()
-    create_table_artists()
-    create_table_relations()
+    # drop_tables()
+    # create_table_albums()
+    # create_table_artists()
+    # create_table_relations()
+    pass

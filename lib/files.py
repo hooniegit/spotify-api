@@ -28,6 +28,7 @@ def files_to_hdfs(type, date):
 # test
 if __name__ == "__main__":
     # confirmed - 23.10.06
-    file_dir = "/home/hooniegit/git/personal/spotify-api/data/sample.json"
-    json_data = {"data" : "Hello, World!"}
-    file_json(file_dir, json_data)
+    # file_dir = "/home/hooniegit/git/personal/spotify-api/data/sample.json"
+    # json_data = {"data" : "Hello, World!"}
+    # file_json(file_dir, json_data)
+    pass

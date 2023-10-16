@@ -53,10 +53,11 @@ def get_response(cnt, endpoint, params:dict=None):
 # test
 if __name__ == "__main__":
     # confirmed - 23.10.16
-    endpoint = 'browse/new-releases'
-    params = {
-        'limit': '50',
-        'offset': '0',
-    }
-    response = get_response(cnt=1, endpoint=endpoint, params=params)
-    print(response)
+    # endpoint = 'browse/new-releases'
+    # params = {
+    #     'limit': '50',
+    #     'offset': '0',
+    # }
+    # response = get_response(cnt=1, endpoint=endpoint, params=params)
+    # print(response)
+    pass
