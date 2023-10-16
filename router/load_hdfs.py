@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from util.to_hdfs import *
+from util.load_hdfs import *
 
 router = APIRouter()
 
