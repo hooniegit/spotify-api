@@ -130,38 +130,38 @@ def browse_featured_playlists(cnt):
     sleep(remain_time) if remain_time > 0 else sleep(0)
 
 
-# api request: artists/related_artists
-def artists_related_artists(cnt, insert_date):
-    from time import time, sleep
+# # api request: artists/related_artists
+# def artists_related_artists(cnt, insert_date):
+#     from time import time, sleep
 
-    conn = open_connector()
+#     conn = open_connector()
 
-    query_search = f"""
-                   SELECT artist_id FROM artists
-                   WHERE insert_date = '{insert_date}'
-                   """
-    result = fetchall_query(conn=conn, query=query_search)
-    id_list = [artist[0] for artist in result]
+#     query_search = f"""
+#                    SELECT artist_id FROM artists
+#                    WHERE insert_date = '{insert_date}'
+#                    """
+#     result = fetchall_query(conn=conn, query=query_search)
+#     id_list = [artist[0] for artist in result]
 
-    for artist_id in id_list:
-        start_time = time()
+#     for artist_id in id_list:
+#         start_time = time()
 
-        endpoint = f'artists/{artist_id}/related-artists'
-        response = get_response(cnt=cnt, endpoint=endpoint)
-        for related_artist in response['artists']:
-            related_artist_id = related_artist['id']
-            query_artists = f'''
-                            INSERT IGNORE INTO artists (artist_id, insert_date)
-                            VALUES (%s, %s)
-                            '''
-            values = (related_artist_id, insert_date)
-            execute_query(conn, query_artists, values)
+#         endpoint = f'artists/{artist_id}/related-artists'
+#         response = get_response(cnt=cnt, endpoint=endpoint)
+#         for related_artist in response['artists']:
+#             related_artist_id = related_artist['id']
+#             query_artists = f'''
+#                             INSERT IGNORE INTO artists (artist_id, insert_date)
+#                             VALUES (%s, %s)
+#                             '''
+#             values = (related_artist_id, insert_date)
+#             execute_query(conn, query_artists, values)
 
-        end_time = time()
-        remain_time = 1 - (end_time - start_time)
-        sleep(remain_time) if remain_time > 0 else sleep(0)
+#         end_time = time()
+#         remain_time = 1 - (end_time - start_time)
+#         sleep(remain_time) if remain_time > 0 else sleep(0)
 
-    conn.close()
+#     conn.close()
 
 
 # api request: artists/albums
@@ -278,6 +278,66 @@ def artists_related_artists(cnt, insert_date):
 #         end_time = time()
 #         remain_time = 0.5 - (end_time - start_time)
 #         sleep(remain_time) if remain_time > 0 else sleep(0)
+
+
+# api request: artists/related_artists
+# multi-thread
+def artists_related_artists(insert_date):
+    from threading import Thread
+    from time import time, sleep
+
+    conn = open_connector()
+
+    query_search = f"""
+                   SELECT artist_id FROM artists
+                   WHERE insert_date = '{insert_date}'
+                   """
+    result = fetchall_query(conn=conn, query=query_search)
+    id_list = [artist[0] for artist in result]
+
+    conn.close()
+
+    def do_work(id_list, cnt, insert_date):
+        conn = open_connector()
+
+        for artist_id in id_list:
+            start_time = time()
+
+            endpoint = f'artists/{artist_id}/related-artists'
+            response = get_response(cnt=cnt, endpoint=endpoint)
+            for related_artist in response['artists']:
+                related_artist_id = related_artist['id']
+                query_artists = f'''
+                                INSERT IGNORE INTO artists (artist_id, insert_date)
+                                VALUES (%s, %s)
+                                '''
+                values = (related_artist_id, insert_date)
+                execute_query(conn, query_artists, values)
+
+            end_time = time()
+            remain_time = 1 - (end_time - start_time)
+            sleep(remain_time) if remain_time > 0 else sleep(0)
+        
+        conn.close()
+
+    index_cnt = len(id_list) // 6
+    index_remain = len(id_list) % 6
+
+    big_list = []
+    for i in range(6):
+        small_list = id_list[i*index_cnt : (i+1)*index_cnt]
+        big_list.append(small_list)
+    big_list[-1] += id_list[-index_remain:]
+
+    threads = []
+    for j in range(len(big_list)):
+        thread = Thread(target=do_work, args=(big_list[j], j+1, insert_date))
+        threads.append(thread)
+        thread.start()
+    
+    for thread in threads:
+        thread.join()   
+
 
 
 # api request: artists/albums
