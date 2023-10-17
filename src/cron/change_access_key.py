@@ -1,5 +1,6 @@
 import os, requests
 from configparser import ConfigParser
+from datetime import datetime
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 config_dir = os.path.join(current_dir, f'../../config/config.ini')
@@ -7,7 +8,7 @@ config_dir = os.path.join(current_dir, f'../../config/config.ini')
 parser = ConfigParser()
 parser.read(config_dir)
 
-for cnt in range (1, 6):
+for cnt in range (1, 7):
     client_id = parser.get("SPOTIFY", f"client_id_{cnt}")
     client_sc = parser.get("SPOTIFY", f"client_sc_{cnt}")
 
@@ -23,5 +24,6 @@ for cnt in range (1, 6):
     with open(config_dir, 'w') as configfile:
         parser.write(configfile)
 
+print(f'Key Changed : {datetime.now().strftime("%Y-%m-%d")}')
 
 # confirmed - 23.10.16

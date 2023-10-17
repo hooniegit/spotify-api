@@ -324,17 +324,17 @@ def thread_artists_albums(insert_date):
                 values = (album_id, artist_id)
                 execute_query(conn, query_relations, values)
 
+            end_time = time()
+            remain_time = 1 - (end_time - start_time)
+            sleep(remain_time) if remain_time > 0 else sleep(0)  
+
         conn.close()
 
-        end_time = time()
-        remain_time = 1 - (end_time - start_time)
-        sleep(remain_time) if remain_time > 0 else sleep(0)  
-
-    index_cnt = len(id_list) // 4
-    index_remain = len(id_list) % 4
+    index_cnt = len(id_list) // 6
+    index_remain = len(id_list) % 6
 
     big_list = []
-    for i in range(4):
+    for i in range(6):
         small_list = id_list[i*index_cnt : (i+1)*index_cnt]
         big_list.append(small_list)
     big_list[-1] += id_list[-index_remain:]
@@ -393,11 +393,11 @@ def thread_albums(insert_date):
             remain_time = 1 - (end_time - start_time)
             sleep(remain_time) if remain_time > 0 else sleep(0)   
 
-    index_cnt = len(id_list) // 4
-    index_remain = len(id_list) % 4
+    index_cnt = len(id_list) // 6
+    index_remain = len(id_list) % 6
 
     big_list = []
-    for i in range(4):
+    for i in range(6):
         small_list = id_list[i*index_cnt : (i+1)*index_cnt]
         big_list.append(small_list)
     big_list[-1] += id_list[-index_remain:]
@@ -450,11 +450,11 @@ def thread_artists(insert_date):
             remain_time = 1 - (end_time - start_time)
             sleep(remain_time) if remain_time > 0 else sleep(0)
 
-    index_cnt = len(id_list) // 4
-    index_remain = len(id_list) % 4
+    index_cnt = len(id_list) // 6
+    index_remain = len(id_list) % 6
 
     big_list = []
-    for i in range(4):
+    for i in range(6):
         small_list = id_list[i*index_cnt : (i+1)*index_cnt]
         big_list.append(small_list)
     big_list[-1] += id_list[-index_remain:]
