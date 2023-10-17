@@ -54,7 +54,7 @@ def browse_new_releases(cnt):
                 execute_query(conn, query_relations, values)
 
         end_time = time()
-        remain_time = 0.5 - (end_time - start_time)
+        remain_time = 1 - (end_time - start_time)
         sleep(remain_time) if remain_time > 0 else sleep(0)
 
     conn.close()
@@ -126,7 +126,7 @@ def browse_featured_playlists(cnt):
     conn.close()
 
     end_time = time()
-    remain_time = 0.5 - (end_time - start_time)
+    remain_time = 1 - (end_time - start_time)
     sleep(remain_time) if remain_time > 0 else sleep(0)
 
 
@@ -158,7 +158,7 @@ def artists_related_artists(cnt, insert_date):
             execute_query(conn, query_artists, values)
 
         end_time = time()
-        remain_time = 0.5 - (end_time - start_time)
+        remain_time = 1 - (end_time - start_time)
         sleep(remain_time) if remain_time > 0 else sleep(0)
 
     conn.close()
@@ -327,7 +327,7 @@ def thread_artists_albums(insert_date):
         conn.close()
 
         end_time = time()
-        remain_time = 0.5 - (end_time - start_time)
+        remain_time = 1 - (end_time - start_time)
         sleep(remain_time) if remain_time > 0 else sleep(0)  
 
     index_cnt = len(id_list) // 4
@@ -390,7 +390,7 @@ def thread_albums(insert_date):
                 file_json(file_dir=file_dir, json_data=track)
 
             end_time = time()
-            remain_time = 0.5 - (end_time - start_time)
+            remain_time = 1 - (end_time - start_time)
             sleep(remain_time) if remain_time > 0 else sleep(0)   
 
     index_cnt = len(id_list) // 4
@@ -447,7 +447,7 @@ def thread_artists(insert_date):
             file_json(file_dir=file_dir, json_data=response)
 
             end_time = time()
-            remain_time = 0.5 - (end_time - start_time)
+            remain_time = 1 - (end_time - start_time)
             sleep(remain_time) if remain_time > 0 else sleep(0)
 
     index_cnt = len(id_list) // 4
@@ -492,7 +492,7 @@ if __name__ == "__main__":
     # artists(1, "2023-10-16")
 
     # confirmed - 23.10.16
-    # thread_artists_albums("2023-10-16")
+    thread_artists_albums("2023-10-17")
 
     # confirmed - 23.10.16
     # thread_albums("2023-10-16")
