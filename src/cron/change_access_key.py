@@ -8,7 +8,7 @@ config_dir = os.path.join(current_dir, f'../../config/config.ini')
 parser = ConfigParser()
 parser.read(config_dir)
 
-for cnt in range (1, 8):
+for cnt in range (1, 11):
     client_id = parser.get("SPOTIFY", f"client_id_{cnt}")
     client_sc = parser.get("SPOTIFY", f"client_sc_{cnt}")
 
