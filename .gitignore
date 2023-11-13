@@ -1,7 +1,6 @@
 /.idea
-__pycache__/
-**/__pycache__/
-config/*
-log/*
-data/*
+**/__pycache__/*
+**/*.ini
+**/*.log
+**/*.json
 **/nohup.out

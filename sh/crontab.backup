@@ -1,0 +1,1 @@
+*/20 * * * * python3 /home/hooniegit/git/spotify-api/src/cron/change_access_key.py >> cron.log 2>&1

@@ -1,3 +1,11 @@
+def create_folders(folder_dir):
+    import os
+
+    try:
+        os.makedirs(folder_dir)
+    except:
+        print(f"FOLDER EXISTS: {folder_dir}")
+
 
 # load file in local
 def file_json(file_dir, json_data):
@@ -11,18 +19,6 @@ def file_json(file_dir, json_data):
             json.dump(json_data, file, indent=4)
     
     print("SUCCEED")
-
-
-# send file from local to hdfs
-def files_to_hdfs(type, date):
-    import subprocess
-    import os
-
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    data_dir = os.path.join(current_dir, f'../data/{type}/{date}')
-
-    subprocess.run(["hdfs", "dfs", "-mkdir", f"/spotify/{type}/{date}"])
-    subprocess.run(["hdfs", "dfs", "-put", f"{data_dir}/", f"/spotify/{type}/"])
 
 
 # test
