@@ -4,4 +4,4 @@ __pycache__/
 config/*
 log/*
 data/*
-nohup.out
+**/nohup.out
