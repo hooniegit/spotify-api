@@ -1,6 +1,16 @@
+# etc
 /.idea
+
+# pycache
 **/__pycache__/*
+
+# informations
 **/*.ini
+
+# logs
 **/*.log
+**/*.out
+
+# datas
 **/*.json
-**/nohup.out
+
